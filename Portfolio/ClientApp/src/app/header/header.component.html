@@ -1,0 +1,17 @@
+<header class="d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 border-bottom">
+    <span class="col-md-3">
+    <a href="/">
+      <img class="logo" src="/assets/POBanner.webp" alt="Peter">
+    </a>
+  </span>
+    <nav>
+        <ul class="nav col-md-auto mb-md-0">
+            <li *ngFor="let r of routes">
+                <a [routerLink]="r.path" class="nav-link px-2 link-dark">{{ r.displayText }}</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="col-md-3 text-end">
+        <a class="btn btn-primary" href="mailto:avogadro.sg1@gmail.com?subject=Contact%20From%20Website">Contact</a>
+    </div>
+</header>
