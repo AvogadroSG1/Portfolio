@@ -1,29 +1,47 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.Extensions.FileProviders;
+//dotnet publish
+// dotnet publish "/Users/Avogadro/Projects/Portfolio/Portfolio/Portfolio.csproj" --configuration "Release" --output "../../PublishOutput/Portfolio"
+var builder = WebApplication.CreateBuilder (args);
 
-// Add services to the container.
+builder.Services.AddControllers ();
+builder.Services.AddSpaStaticFiles (configuration => {
+    configuration.RootPath = "ClientApp/dist";
+});
 
-builder.Services.AddControllersWithViews();
+var app = builder.Build ();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+if (!app.Environment.IsDevelopment ()) {
+    app.UseHsts ();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
+app.UseForwardedHeaders (new ForwardedHeadersOptions {
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
+app.UseHttpsRedirection ();
+app.UseStaticFiles ();
+app.UseStaticFiles ();
+if (!app.Environment.IsDevelopment ()) {
+    app.UseSpaStaticFiles ();
+}
+app.UseRouting ();
 
-app.MapControllerRoute(
+app.MapControllerRoute (
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
+app.UseSpa (spa => {
 
-app.MapFallbackToFile("index.html");
+    spa.Options.SourcePath = "ClientApp/";
+    spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions () {
+        FileProvider = new PhysicalFileProvider (Path.Combine (Directory.GetCurrentDirectory (), "ClientApp")),
+        RequestPath = PathString.Empty
+    };
+    if (app.Environment.IsDevelopment ()) {
+        spa.UseAngularCliServer (npmScript: "start");
+    }
+});
 
-app.Run();
-
+app.Run ();
