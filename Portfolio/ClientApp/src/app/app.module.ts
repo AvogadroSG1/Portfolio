@@ -9,6 +9,11 @@ import { MySocialComponent } from './my-social/my-social.component';
 import { MyWorkComponent } from './my-work/my-work.component';
 import { HeaderComponent } from './header/header.component';
 import { MyBlogComponent } from './my-blog/my-blog.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
+import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { LoginComponent } from './login/login.component';
+import { BlogPostClient } from './client-api/client-api';
 
 @NgModule({
   declarations: [
@@ -18,13 +23,19 @@ import { MyBlogComponent } from './my-blog/my-blog.component';
     MyselfComponent,
     MySocialComponent,
     MyWorkComponent,
-    MyBlogComponent
+    MyBlogComponent,
+    LoginComponent
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule
+    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    HttpClientModule,
+    ApiAuthorizationModule,
+    AppRoutingModule,
   ],
-  providers: [],
+  providers: [
+    BlogPostClient,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

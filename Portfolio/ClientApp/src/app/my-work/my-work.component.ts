@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { catchError, Observable, of } from 'rxjs';
+import { ApiException, BlogPostClient } from '../client-api/client-api';
 
 @Component({
   selector: 'app-my-work',
@@ -6,10 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./my-work.component.css']
 })
 export class MyWorkComponent implements OnInit {
-
-  constructor() { }
+  constructor(private testAPI: BlogPostClient) { }
 
   ngOnInit(): void {
   }
-
 }

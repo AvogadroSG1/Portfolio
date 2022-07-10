@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, map } from 'rxjs';
+import { AuthorizeService } from 'src/api-authorization/authorize.service';
 
 @Component({
   selector: 'app-footer',
@@ -7,8 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  isAuthenticated: Observable<boolean>;
+  userName: Observable<string | null | undefined>;
 
+  constructor(private authorizeService: AuthorizeService) {
+    this.isAuthenticated = this.authorizeService.isAuthenticated();
+    this.userName = this.authorizeService.getUser().pipe(map(u => u && u.name));
+  }
   ngOnInit(): void {
   }
 

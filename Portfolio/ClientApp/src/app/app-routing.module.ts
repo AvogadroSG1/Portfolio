@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
+import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
+import { LoginComponent } from './login/login.component';
 import { MyBlogComponent } from './my-blog/my-blog.component';
 import { MySocialComponent } from './my-social/my-social.component';
 import { MyWorkComponent } from './my-work/my-work.component';
@@ -15,11 +17,20 @@ export declare type MyRoutes = MyRoute[];
 
 export const routes: MyRoutes = [
   {
-    path: 'myself',
+    path: '',
     component: MyselfComponent,
     displayText: 'Myself',
     routeIcon: 'person',
-    displayOnNav: true
+    displayOnNav: true,
+    pathMatch: 'full'
+  },
+  {
+    path: 'battlestar',
+    component: LoginComponent,
+    displayText: 'Myself',
+    routeIcon: 'person',
+    displayOnNav: false,
+    pathMatch: 'full'
   },
   {
     path: 'my-work',
@@ -40,12 +51,8 @@ export const routes: MyRoutes = [
     component: MyBlogComponent,
     displayText: 'My Blog',
     routeIcon: 'person',
-    displayOnNav: true
-  },
-  {
-    path: '**',
-    redirectTo: 'myself',
-    displayOnNav: false
+    displayOnNav: true,
+    canActivate: [AuthorizeGuard]
   }
 ];
 
