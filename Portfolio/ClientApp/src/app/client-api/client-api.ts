@@ -16,7 +16,11 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const PortfolioAPI = new InjectionToken<string>('PortfolioAPI');
 
 export interface IBlogPostClient {
-    test(): Observable<number>;
+    getBlogCount(): Observable<number>;
+    getPostsCount(blogId?: number | undefined): Observable<number>;
+    getPosts(blogId?: number | undefined, page?: number | undefined): Observable<PostView[]>;
+    createBlog(blogView: BlogView): Observable<number>;
+    createPost(postView: PostView): Observable<number>;
 }
 
 @Injectable()
@@ -30,8 +34,8 @@ export class BlogPostClient implements IBlogPostClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    test(): Observable<number> {
-        let url_ = this.baseUrl + "/api/BlogPost/Test";
+    getBlogCount(): Observable<number> {
+        let url_ = this.baseUrl + "/api/BlogPost/GetBlogCount";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -43,11 +47,11 @@ export class BlogPostClient implements IBlogPostClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processTest(response_);
+            return this.processGetBlogCount(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processTest(response_ as any);
+                    return this.processGetBlogCount(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<number>;
                 }
@@ -56,7 +60,215 @@ export class BlogPostClient implements IBlogPostClient {
         }));
     }
 
-    protected processTest(response: HttpResponseBase): Observable<number> {
+    protected processGetBlogCount(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as number;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(null as any);
+    }
+
+    getPostsCount(blogId?: number | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/BlogPost/GetPostsCount?";
+        if (blogId === null)
+            throw new Error("The parameter 'blogId' cannot be null.");
+        else if (blogId !== undefined)
+            url_ += "BlogId=" + encodeURIComponent("" + blogId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPostsCount(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPostsCount(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processGetPostsCount(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as number;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(null as any);
+    }
+
+    getPosts(blogId?: number | undefined, page?: number | undefined): Observable<PostView[]> {
+        let url_ = this.baseUrl + "/api/BlogPost/GetPosts?";
+        if (blogId === null)
+            throw new Error("The parameter 'blogId' cannot be null.");
+        else if (blogId !== undefined)
+            url_ += "BlogId=" + encodeURIComponent("" + blogId) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPosts(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPosts(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PostView[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PostView[]>;
+        }));
+    }
+
+    protected processGetPosts(response: HttpResponseBase): Observable<PostView[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as PostView[];
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PostView[]>(null as any);
+    }
+
+    createBlog(blogView: BlogView): Observable<number> {
+        let url_ = this.baseUrl + "/api/BlogPost/CreateBlog";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(blogView);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateBlog(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateBlog(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreateBlog(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as number;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(null as any);
+    }
+
+    createPost(postView: PostView): Observable<number> {
+        let url_ = this.baseUrl + "/api/BlogPost/CreatePost";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(postView);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreatePost(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreatePost(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreatePost(response: HttpResponseBase): Observable<number> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -141,6 +353,20 @@ export class OidcConfigurationClient implements IOidcConfigurationClient {
         }
         return _observableOf<FileResponse | null>(null as any);
     }
+}
+
+export interface PostView {
+    postID?: number | null;
+    title?: string | null;
+    content?: string | null;
+    blogId: number;
+}
+
+export interface BlogView {
+    blogId?: number | null;
+    url?: string | null;
+    name?: string | null;
+    posts?: PostView[] | null;
 }
 
 export interface FileResponse {
