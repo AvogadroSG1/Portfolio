@@ -5,7 +5,7 @@
         public int BlogID { get; set; }
         public string Url { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Post>? Posts { get; set; }
 
         public BlogView ConvertToBlogView()
         {
@@ -14,7 +14,7 @@
                 BlogId = BlogID,
                 Url = Url,
                 Name = Name,
-                Posts = Posts.Select(p => p.ConvertToPostView())
+                Posts = Posts?.Select(p => p.ConvertToPostView())
             };
         }
     }

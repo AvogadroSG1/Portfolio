@@ -5,11 +5,12 @@ namespace Portfolio.Data.Models.PortfolioBlogging;
 public class Post
 {
     public int PostID { get; set; }
-    
+
     public string Title { get; set; }
-    
+
     public string Content { get; set; }
 
+    public bool IsDeleted { get; set; }
     public int BlogID { get; set; }
 
     [ForeignKey(nameof(BlogID))]
@@ -19,30 +20,31 @@ public class Post
     {
         return new()
         {
-            PostID = PostID,
+            PostId = PostID,
             Title = Title,
-            Content = Content
+            Content = Content,
+            BlogId = BlogID
         };
     }
 }
 
 public class PostView
 {
-    public int? PostID { get; set; }
-    
+    public int PostId { get; set; }
+
     public string Title { get; set; }
-    
+
     public string Content { get; set; }
-    
+
     public int BlogId { get; set; }
 
     public Post ConvertToPost()
     {
         return new()
         {
-            PostID = PostID ?? 0,
+            PostID = PostId,
             Title = Title,
-            Content= Content,
+            Content = Content,
             BlogID = BlogId
         };
     }
