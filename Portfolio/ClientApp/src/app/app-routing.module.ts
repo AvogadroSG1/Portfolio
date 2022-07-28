@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { LoginComponent } from './login/login.component';
-import { MyBlogComponent } from './my-blog/my-blog.component';
 import { MySocialComponent } from './my-social/my-social.component';
 import { MyWorkComponent } from './my-work/my-work.component';
 import { MyselfComponent } from './myself/myself.component';
@@ -47,12 +46,11 @@ export const routes: MyRoutes = [
     displayOnNav: true
   },
   {
-    path: 'my-blog',
-    component: MyBlogComponent,
-    displayText: 'My Blog',
+    path: 'my-blogs',
+    loadChildren: () => import('../app/my-blogs/my-blogs.module').then(m => m.MyBlogsModule),
+    displayText: 'My Blogs',
     routeIcon: 'person',
-    displayOnNav: true,
-    canActivate: [AuthorizeGuard]
+    displayOnNav: true
   }
 ];
 

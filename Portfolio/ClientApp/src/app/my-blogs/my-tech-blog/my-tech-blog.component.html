@@ -1,0 +1,22 @@
+<section class="row mb-4">
+<ng-container *ngIf="(blogs | async) as currentBlogs">
+  <div *ngFor="let blog of currentBlogs">{{blog.name}}</div> 
+</ng-container>
+    <!-- <article class="col-md-12 d-flex flex-column justify-content-center align-items-center">
+      <h1>Hi, I'm Peter O'Connor</h1>
+      <p class="lead">
+        I am a weight lifter, cat owner, bird lover and all around okay
+        guy.
+      </p>
+      <p class="text-center">
+        My daily work revolves around a small website called <a href="https://www.stackoverflow.com/">StackOverflow</a>. I'm a Senior Engineer on the Core Services team where
+        we provide service based architecture to the Stack platform.
+      </p>
+      <p class="text-center">
+        I've been developing web applications for the previous 6 years at Carroll County Public Schools.
+        While
+        here, I've created some of the hardest used apps including our Secured Student Document Portal and
+        Elementary Grading System.
+      </p>
+    </article> -->
+</section>
