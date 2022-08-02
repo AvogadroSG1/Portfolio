@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { BlogPostClient, BlogView } from '../../client-api/client-api';
-
+import { map, Observable, of } from 'rxjs';
+import { BlogPostClient, BlogView, PostView } from '../../client-api/client-api';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-my-tech-blog',
   templateUrl: './my-tech-blog.component.html',
@@ -9,13 +9,18 @@ import { BlogPostClient, BlogView } from '../../client-api/client-api';
 })
 export class MyTechBlogComponent implements OnInit {
 
-  blogs: Observable<BlogView[]> = of([] as BlogView[]);
+  faPlus = faPlus;
+
+  posts: Observable<PostView[]> = of([] as PostView[]);
 
   constructor(private client: BlogPostClient) {
-    this.blogs = this.client.getBlogs();
+    this.posts = this.client.getPosts();
   }
 
   ngOnInit(): void {
   }
 
+  newPost(blogId: number): void {
+
+  }
 }

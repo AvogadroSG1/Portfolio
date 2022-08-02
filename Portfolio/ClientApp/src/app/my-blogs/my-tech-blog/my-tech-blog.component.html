@@ -1,22 +1,54 @@
-<section class="row mb-4">
-<ng-container *ngIf="(blogs | async) as currentBlogs">
-  <div *ngFor="let blog of currentBlogs">{{blog.name}}</div> 
-</ng-container>
-    <!-- <article class="col-md-12 d-flex flex-column justify-content-center align-items-center">
-      <h1>Hi, I'm Peter O'Connor</h1>
-      <p class="lead">
-        I am a weight lifter, cat owner, bird lover and all around okay
-        guy.
-      </p>
-      <p class="text-center">
-        My daily work revolves around a small website called <a href="https://www.stackoverflow.com/">StackOverflow</a>. I'm a Senior Engineer on the Core Services team where
-        we provide service based architecture to the Stack platform.
-      </p>
-      <p class="text-center">
-        I've been developing web applications for the previous 6 years at Carroll County Public Schools.
-        While
-        here, I've created some of the hardest used apps including our Secured Student Document Portal and
-        Elementary Grading System.
-      </p>
-    </article> -->
-</section>
+<main>
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">My Tech Blog</h1>
+        <p class="lead text-muted">Here you can find my musings about how I approach software, hard problems and what I've done right and wrong in the past.  Hopefully you can learn something from me!</p>
+        <p>
+          <button href="#" type="button" routerLink="NewBlogPost" class="btn btn-primary my-2"><fa-icon [icon]="faPlus" class="mx-1"></fa-icon>Add Post</button>
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="row mb-4">
+    <ng-container *ngIf="(posts | async) as currentPosts; else loading">
+      <div *ngIf="currentPosts.length; else noPosts" class="album py-5">
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col" *ngFor="let post of currentPosts">
+              <div class="card shadow-sm">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                  <p class="card-title">{{post.title}}</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                    </div>
+                    <small class="text-muted">9 mins</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <ng-template #noPosts>
+        <section class="py-5 text-center container">
+          <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+              <h2 class="fw-light">No Posts found.  So much emptiness.</h2>
+            </div>
+          </div>
+        </section>
+      </ng-template>
+
+    </ng-container>
+    <ng-template #loading>
+      Loading...
+    </ng-template>
+  </section>
+
+</main>

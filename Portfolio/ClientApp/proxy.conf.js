@@ -14,7 +14,8 @@ const PROXY_CONFIG = [
       "/ApplyDatabaseMigrations",
       "/_framework",
       "/api/BlogPost/Test",
-      "/api/BlogPost/GetBlogs"
+      "/api/BlogPost/GetBlogs",
+      "/api/BlogPost/GetPosts"
    ],
     target: target,
     secure: false,

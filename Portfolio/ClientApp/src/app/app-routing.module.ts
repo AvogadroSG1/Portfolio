@@ -16,20 +16,18 @@ export declare type MyRoutes = MyRoute[];
 
 export const routes: MyRoutes = [
   {
-    path: '',
+    path: 'myself',
     component: MyselfComponent,
     displayText: 'Myself',
     routeIcon: 'person',
-    displayOnNav: true,
-    pathMatch: 'full'
+    displayOnNav: true
   },
   {
     path: 'battlestar',
     component: LoginComponent,
     displayText: 'Myself',
     routeIcon: 'person',
-    displayOnNav: false,
-    pathMatch: 'full'
+    displayOnNav: false
   },
   {
     path: 'my-work',
@@ -51,7 +49,9 @@ export const routes: MyRoutes = [
     displayText: 'My Blogs',
     routeIcon: 'person',
     displayOnNav: true
-  }
+  },
+  { path: 'home', redirectTo: '/myself', displayOnNav: false },
+  { path: '**', redirectTo: '/myself', displayOnNav: false },
 ];
 
 @NgModule({

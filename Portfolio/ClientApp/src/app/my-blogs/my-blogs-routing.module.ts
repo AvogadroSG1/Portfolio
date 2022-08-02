@@ -2,15 +2,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MyRoutes } from '../app-routing.module';
 import { MyTechBlogComponent } from './my-tech-blog/my-tech-blog.component';
+import { NewBlogPostComponent } from './new-blog-post/new-blog-post.component';
 
 export const routes: MyRoutes = [
   {
-    path: 'my-blogs',
+    path: '',
     component: MyTechBlogComponent,
-    displayText: 'Myself',
-    routeIcon: 'person',
-    displayOnNav: true,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    displayOnNav: true
+  },
+  {
+    path: 'NewBlogPost',
+    component: NewBlogPostComponent,
+    displayOnNav: false
   }
 ];
 
